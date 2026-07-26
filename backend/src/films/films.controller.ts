@@ -1,12 +1,13 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { FilmsService } from './films.service';
+import { FilmDto } from './dto/films.dto';
 
 @Controller('films')
 export class FilmsController {
   constructor(private readonly filmsService: FilmsService) {}
 
   @Get()
-  async getFilms() {
+  async getFilms(): Promise<{ total: number; items: FilmDto[] }> {
     const items = await this.filmsService.findAll();
     return { total: items.length, items };
   }
