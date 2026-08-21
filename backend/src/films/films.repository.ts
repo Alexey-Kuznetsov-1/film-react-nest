@@ -14,20 +14,9 @@ export class FilmsRepository {
   ) {}
 
   async findAll(): Promise<Film[]> {
-    const films = await this.filmRepository.find({
+    return this.filmRepository.find({
       relations: ['schedule'],
     });
-
-    // Сортируем сеансы по времени для каждого фильма
-    films.forEach((film) => {
-      if (film.schedule) {
-        film.schedule.sort((a, b) => {
-          return new Date(a.daytime).getTime() - new Date(b.daytime).getTime();
-        });
-      }
-    });
-
-    return films;
   }
 
   async findById(id: string): Promise<Film | null> {
@@ -35,13 +24,13 @@ export class FilmsRepository {
       where: { id },
       relations: ['schedule'],
     });
-
+    
     if (film && film.schedule) {
       film.schedule.sort((a, b) => {
         return new Date(a.daytime).getTime() - new Date(b.daytime).getTime();
       });
     }
-
+    
     return film;
   }
 
@@ -57,7 +46,7 @@ export class FilmsRepository {
 
   async delete(id: string): Promise<boolean> {
     const result = await this.filmRepository.delete({ id });
-    return result.affected > 0;
+    return (result.affected ?? 0) > 0;
   }
 
   async updateScheduleTaken(
@@ -65,7 +54,6 @@ export class FilmsRepository {
     sessionId: string,
     seatKey: string,
   ): Promise<boolean> {
-    // Находим сеанс
     const schedule = await this.scheduleRepository.findOne({
       where: {
         filmId: filmId,
@@ -77,21 +65,15 @@ export class FilmsRepository {
       return false;
     }
 
-    // Проверяем, не занято ли место
-    const takenArray =
-      schedule.taken && schedule.taken.length > 0
-        ? schedule.taken.split(',')
-        : [];
-
-    if (takenArray.includes(seatKey)) {
+    if (schedule.taken && schedule.taken.includes(seatKey)) {
       return false;
     }
 
-    // Добавляем место
-    takenArray.push(seatKey);
-    schedule.taken = takenArray.join(',');
+    if (!schedule.taken) {
+      schedule.taken = [];
+    }
+    schedule.taken.push(seatKey);
 
-    // Сохраняем
     await this.scheduleRepository.save(schedule);
     return true;
   }

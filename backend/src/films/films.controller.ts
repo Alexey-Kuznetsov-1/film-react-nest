@@ -1,13 +1,12 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, NotFoundException } from '@nestjs/common';
 import { FilmsService } from './films.service';
-import { FilmDto } from './dto/films.dto';
 
 @Controller('films')
 export class FilmsController {
   constructor(private readonly filmsService: FilmsService) {}
 
   @Get()
-  async getFilms(): Promise<{ total: number; items: FilmDto[] }> {
+  async getFilms() {
     const items = await this.filmsService.findAll();
     return { total: items.length, items };
   }
@@ -16,7 +15,7 @@ export class FilmsController {
   async getFilmSchedule(@Param('id') id: string) {
     const film = await this.filmsService.findById(id);
     if (!film) {
-      return { total: 0, items: [] };
+      throw new NotFoundException(`Film with id ${id} not found`);
     }
     return { total: film.schedule?.length || 0, items: film.schedule || [] };
   }

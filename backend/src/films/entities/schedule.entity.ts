@@ -4,30 +4,30 @@ import { Film } from './film.entity';
 @Entity('schedules')
 export class Schedule {
   @PrimaryColumn()
-  id: string;
+  id!: string;
 
   @Column()
-  daytime: string;
+  daytime!: string;
 
   @Column()
-  hall: string;
+  hall!: string;
 
   @Column()
-  rows: number;
+  rows!: number;
 
   @Column()
-  seats: number;
+  seats!: number;
 
   @Column()
-  price: number;
+  price!: number;
 
-  @Column({ type: 'text', default: '' })
-  taken: string;
+  @Column('text', { array: true, default: [] })
+  taken!: string[];
 
   @ManyToOne(() => Film, (film) => film.schedule, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'filmId' })
-  film: Film;
+  film!: Film;
 
   @Column()
-  filmId: string;
+  filmId!: string;
 }

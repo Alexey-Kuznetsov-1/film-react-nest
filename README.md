@@ -1,36 +1,174 @@
-# FILM!
+# FILM! - API Сервис бронирования билетов в кинотеатр
+
+## Описание проекта
+
+API-сервис для онлайн-бронирования билетов в кинотеатр. Проект включает:
+- Бэкенд на NestJS с использованием PostgreSQL и TypeORM
+- Фронтенд на React (в папке frontend)
+
+## Технологии
+
+- **NestJS** - фреймворк для построения серверных приложений
+- **TypeORM** - ORM для работы с PostgreSQL
+- **PostgreSQL** - реляционная база данных
+- **TypeScript** - типизированный JavaScript
 
 ## Установка
 
-### MongoDB
+### Требования
 
-Установите MongoDB скачав дистрибутив с официального сайта или с помощью пакетного менеджера вашей ОС. Также можно воспользоваться Docker (см. ветку `feat/docker`.
+- Node.js (версия 18 или выше)
+- PostgreSQL (версия 13 или выше)
+- npm или yarn
 
-Выполните скрипт `test/mongodb_initial_stub.js` в консоли `mongo`.
+### Установка PostgreSQL
 
-### Бэкенд
+#### macOS
+brew install postgresql
+brew services start postgresql
 
-Перейдите в папку с исходным кодом бэкенда
+#### Ubuntu/Debian
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+sudo systemctl start postgresql
 
-`cd backend`
+#### Windows
+Скачайте установщик с официального сайта PostgreSQL: https://www.postgresql.org/download/windows/
 
-Установите зависимости (точно такие же, как в package-lock.json) помощью команд
+### Настройка базы данных
 
-`npm ci` или `yarn install --frozen-lockfile`
+1. Создайте пользователя и базу данных:
 
-Создайте `.env` файл из примера `.env.example`, в нём укажите:
+CREATE USER prac WITH PASSWORD 'prac';
+CREATE DATABASE prac OWNER prac;
+GRANT ALL PRIVILEGES ON DATABASE prac TO prac;
 
-* `DATABASE_DRIVER` - тип драйвера СУБД - в нашем случае это `mongodb` 
-* `DATABASE_URL` - адрес СУБД MongoDB, например `mongodb://127.0.0.1:27017/practicum`.  
+2. Выполните SQL-скрипты для создания таблиц и заполнения тестовыми данными:
 
-MongoDB должна быть установлена и запущена.
+# В корне проекта
+psql -U prac -d prac -f backend/test/prac.init.sql
+psql -U prac -d prac -f backend/test/prac.films.sql
+psql -U prac -d prac -f backend/test/prac.shedules.sql
 
-Запустите бэкенд:
+### Установка бэкенда
 
-`npm start:debug`
+# Перейдите в папку бэкенда
+cd backend
 
-Для проверки отправьте тестовый запрос с помощью Postman или `curl`.
+# Установите зависимости
+npm install
 
+# Создайте .env файл из примера
+cp .env.example .env
 
+Настройте .env файл:
 
+DATABASE_DRIVER=postgres
+DATABASE_URL=postgresql://prac:prac@localhost:5432/prac
+DATABASE_USERNAME=prac
+DATABASE_PASSWORD=prac
+PORT=3000
 
+### Запуск бэкенда
+
+# Режим разработки
+npm run start:dev
+
+# Режим отладки
+npm run start:debug
+
+# Сборка
+npm run build
+
+# Продакшн
+npm run start
+
+### Установка фронтенда
+
+# Перейдите в папку фронтенда
+cd frontend
+
+# Установите зависимости
+npm install
+
+# Создайте .env файл
+cp .env.example .env
+
+Настройте .env фронтенда:
+
+VITE_API_URL=http://localhost:3000/api/afisha
+VITE_CDN_URL=http://localhost:3000/content/afisha
+
+### Запуск фронтенда
+
+npm run dev
+
+## API Эндпоинты
+
+Бэкенд доступен по адресу: http://localhost:3000
+
+### Фильмы
+
+| Метод | Эндпоинт | Описание |
+|-------|----------|----------|
+| GET | /api/afisha/films | Получить список всех фильмов |
+| GET | /api/afisha/films/:id/schedule | Получить расписание фильма |
+
+### Заказы
+
+| Метод | Эндпоинт | Описание |
+|-------|----------|----------|
+| POST | /api/afisha/order | Создать заказ (бронирование билетов) |
+
+### Статика
+
+| Метод | Эндпоинт | Описание |
+|-------|----------|----------|
+| GET | /content/afisha/* | Получение статических файлов (афиши) |
+
+## Тестирование
+
+### Запуск тестов
+
+# В папке backend
+npm run test
+
+### Проверка API через curl
+
+# Получить список фильмов
+curl http://localhost:3000/api/afisha/films
+
+# Получить расписание фильма
+curl http://localhost:3000/api/afisha/films/0e33c7f6-27a7-4aa0-8e61-65d7e5effecf/schedule
+
+# Забронировать билет
+curl -X POST http://localhost:3000/api/afisha/order \
+  -H "Content-Type: application/json" \
+  -d '[{"film":"0e33c7f6-27a7-4aa0-8e61-65d7e5effecf","session":"f2e429b0-685d-41f8-a8cd-1d8cb63b99ce","daytime":"2024-06-28T10:00:53+03:00","row":1,"seat":1,"price":350}]'
+
+## Структура проекта
+
+backend/
+├── src/
+│   ├── films/          # Модуль фильмов
+│   │   ├── dto/        # DTO для фильмов
+│   │   ├── entities/   # Сущности Film и Schedule
+│   │   ├── films.controller.ts
+│   │   ├── films.service.ts
+│   │   └── films.repository.ts
+│   ├── order/          # Модуль заказов
+│   │   ├── dto/        # DTO для заказов
+│   │   ├── order.controller.ts
+│   │   └── order.service.ts
+│   ├── app.module.ts   # Главный модуль
+│   └── main.ts         # Точка входа
+├── test/               # Тесты и SQL скрипты
+└── public/             # Статические файлы
+
+frontend/
+├── src/                # Исходники React
+└── public/             # Статика фронтенда
+
+## Лицензия
+
+MIT

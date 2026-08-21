@@ -4,32 +4,32 @@ import { Schedule } from './schedule.entity';
 @Entity('films')
 export class Film {
   @PrimaryColumn()
-  id: string;
+  id!: string;
 
   @Column({ type: 'float' })
-  rating: number;
+  rating!: number;
 
   @Column()
-  director: string;
+  director!: string;
 
   @Column('text', { array: true })
-  tags: string[];
+  tags!: string[];
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column({ type: 'text' })
-  about: string;
+  about!: string;
 
   @Column({ type: 'text' })
-  description: string;
+  description!: string;
 
   @Column()
-  image: string;
+  image!: string;
 
   @Column()
-  cover: string;
+  cover!: string;
 
   @OneToMany(() => Schedule, (schedule) => schedule.film, { cascade: true })
-  schedule: Schedule[];
+  schedule!: Schedule[];
 }

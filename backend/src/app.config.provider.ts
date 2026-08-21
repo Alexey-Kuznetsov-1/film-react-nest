@@ -3,8 +3,11 @@ import { ConfigModule } from '@nestjs/config';
 export const configProvider = {
   imports: [ConfigModule.forRoot()],
   provide: 'CONFIG',
-  useValue: <AppConfig>{
-    //TODO прочесть переменнные среды
+  useValue: {
+    database: {
+      driver: process.env.DATABASE_DRIVER || 'postgres',
+      url: process.env.DATABASE_URL || 'postgresql://localhost:5432/prac',
+    },
   },
 };
 
