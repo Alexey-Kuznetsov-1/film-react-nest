@@ -1,5 +1,4 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
 import { FilmsRepository } from '../films/films.repository';
 import { CreateOrderItemDto } from './dto/order.dto';
 
@@ -59,6 +58,9 @@ export class OrderService {
       if (!session) {
         throw new NotFoundException(`Session with id ${item.session} not found`);
       }
+
+      // Динамический импорт uuid
+      const { v4: uuidv4 } = await import('uuid');
 
       bookedTickets.push({
         id: uuidv4(),

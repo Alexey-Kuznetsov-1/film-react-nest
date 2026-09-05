@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: film-postgres
+    environment:
+      POSTGRES_USER: prac
+      POSTGRES_PASSWORD: prac
+      POSTGRES_DB: prac
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - film-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: film-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "8080:80"
+    networks:
+      - film-network
+    depends_on:
+      - postgres
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: film-backend
+    environment:
+      DATABASE_DRIVER: postgres
+      DATABASE_URL: postgresql://prac:prac@postgres:5432/prac
+      DATABASE_USERNAME: prac
+      DATABASE_PASSWORD: prac
+      PORT: 3000
+      LOGGER_TYPE: json
+    ports:
+      - "3000:3000"
+    networks:
+      - film-network
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend/public:/app/public
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: film-frontend
+    ports:
+      - "80:80"
+    networks:
+      - film-network
+    depends_on:
+      - backend
+
+networks:
+  film-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  pgadmin_data:
