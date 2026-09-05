@@ -173,11 +173,11 @@ frontend/
 
 Проект развернут и доступен по следующим адресам:
 
-- **Фронтенд:** http://film-project.nomoreparties.site (или http://111.88.147.38)
-- **pgAdmin:** http://film-project.nomoreparties.site:8080 (или http://111.88.147.38:8080)
+- **Фронтенд:** http://film-alexey-kuznetsov.nomoreparties.site (или http://111.88.147.38)
+- **pgAdmin:** http://film-alexey-kuznetsov.nomoreparties.site:8080 (или http://111.88.147.38:8080)
   - Логин: `admin@example.com`
   - Пароль: `admin`
-- **API:** http://film-project.nomoreparties.site/api/afisha
+- **API:** http://film-alexey-kuznetsov.nomoreparties.site/api/afisha
 
 ### Docker образы
 
@@ -188,7 +188,6 @@ frontend/
 
 ### Запуск на сервере
 
-```bash
 # Скопировать docker-compose.yml на сервер
 # Запустить контейнеры
 docker compose pull

@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { FilmsRepository } from '../films/films.repository';
 import { CreateOrderItemDto } from './dto/order.dto';
 
@@ -22,16 +26,22 @@ export class OrderService {
         throw new NotFoundException(`Film with id ${item.film} not found`);
       }
 
-      const session = film.schedule.find(s => s.id === item.session);
+      const session = film.schedule.find((s) => s.id === item.session);
       if (!session) {
-        throw new NotFoundException(`Session with id ${item.session} not found`);
+        throw new NotFoundException(
+          `Session with id ${item.session} not found`,
+        );
       }
 
       if (item.row < 1 || item.row > session.rows) {
-        throw new BadRequestException(`Row ${item.row} is out of range (1-${session.rows})`);
+        throw new BadRequestException(
+          `Row ${item.row} is out of range (1-${session.rows})`,
+        );
       }
       if (item.seat < 1 || item.seat > session.seats) {
-        throw new BadRequestException(`Seat ${item.seat} is out of range (1-${session.seats})`);
+        throw new BadRequestException(
+          `Seat ${item.seat} is out of range (1-${session.seats})`,
+        );
       }
     }
 
@@ -54,9 +64,11 @@ export class OrderService {
         throw new NotFoundException(`Film with id ${item.film} not found`);
       }
 
-      const session = film.schedule.find(s => s.id === item.session);
+      const session = film.schedule.find((s) => s.id === item.session);
       if (!session) {
-        throw new NotFoundException(`Session with id ${item.session} not found`);
+        throw new NotFoundException(
+          `Session with id ${item.session} not found`,
+        );
       }
 
       // Динамический импорт uuid

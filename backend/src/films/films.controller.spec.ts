@@ -76,9 +76,9 @@ describe('FilmsController', () => {
 
     it('should throw NotFoundException if film not found', async () => {
       mockFilmsService.findById.mockResolvedValueOnce(null);
-      await expect(controller.getFilmSchedule('non-existent-id')).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        controller.getFilmSchedule('non-existent-id'),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 });

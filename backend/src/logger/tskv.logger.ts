@@ -2,7 +2,11 @@ import { LoggerService, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class TskvLogger implements LoggerService {
-  private formatMessage(level: string, message: any, ...optionalParams: any[]): string {
+  private formatMessage(
+    level: string,
+    message: any,
+    ...optionalParams: any[]
+  ): string {
     const fields: Record<string, string> = {
       level: level,
       message: typeof message === 'string' ? message : JSON.stringify(message),
@@ -11,7 +15,8 @@ export class TskvLogger implements LoggerService {
 
     if (optionalParams.length > 0) {
       optionalParams.forEach((param, index) => {
-        fields[`param${index}`] = typeof param === 'string' ? param : JSON.stringify(param);
+        fields[`param${index}`] =
+          typeof param === 'string' ? param : JSON.stringify(param);
       });
     }
 

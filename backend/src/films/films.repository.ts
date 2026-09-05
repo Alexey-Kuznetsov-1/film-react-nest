@@ -24,13 +24,13 @@ export class FilmsRepository {
       where: { id },
       relations: ['schedule'],
     });
-    
+
     if (film && film.schedule) {
       film.schedule.sort((a, b) => {
         return new Date(a.daytime).getTime() - new Date(b.daytime).getTime();
       });
     }
-    
+
     return film;
   }
 
