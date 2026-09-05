@@ -169,6 +169,27 @@ frontend/
 ├── src/                # Исходники React
 └── public/             # Статика фронтенда
 
-## Лицензия
+## Деплой
 
-MIT
+Проект развернут и доступен по следующим адресам:
+
+- **Фронтенд:** http://film-project.nomoreparties.site (или http://111.88.147.38)
+- **pgAdmin:** http://film-project.nomoreparties.site:8080 (или http://111.88.147.38:8080)
+  - Логин: `admin@example.com`
+  - Пароль: `admin`
+- **API:** http://film-project.nomoreparties.site/api/afisha
+
+### Docker образы
+
+Образы опубликованы в GitHub Container Registry:
+
+- [film-backend](https://github.com/Alexey-Kuznetsov-1/film-react-nest/pkgs/container/film-react-nest%2Ffilm-backend)
+- [film-frontend](https://github.com/Alexey-Kuznetsov-1/film-react-nest/pkgs/container/film-react-nest%2Ffilm-frontend)
+
+### Запуск на сервере
+
+```bash
+# Скопировать docker-compose.yml на сервер
+# Запустить контейнеры
+docker compose pull
+docker compose up -d
