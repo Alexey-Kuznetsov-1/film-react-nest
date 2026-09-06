@@ -173,11 +173,11 @@ frontend/
 
 Проект развернут и доступен по следующим адресам:
 
-- **Фронтенд:** http://app-film-alexey-kuznetsov.nomoreparties.site (или http://111.88.147.38)
-- **pgAdmin:** http://app-film-alexey-kuznetsov.nomoreparties.site:8080 (или http://111.88.147.38:8080)
+- **Фронтенд:** http://frontend.nomorepartiessite.ru (или http://111.88.147.38)
+- **pgAdmin:** http://frontend.nomorepartiessite.ru:8080 (или http://111.88.147.38:8080)
   - Логин: `admin@example.com`
   - Пароль: `admin`
-- **API:** http://app-film-alexey-kuznetsov.nomoreparties.site/api/afisha
+- **API:** http://frontend.nomorepartiessite.ru/api/afisha
 
 ### Docker образы
 
